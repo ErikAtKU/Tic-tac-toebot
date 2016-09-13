@@ -1,10 +1,10 @@
 import board
-import player
+from player import Human as H, Random as R, Minimax as M
 
-def game(verbose):
+def game(verbose,p1,p2):
     myBoard = board.Board()
-    one = player.Random(1,myBoard)
-    two = player.Random(2,myBoard)
+    one = p1(1,myBoard)
+    two = p2(2,myBoard)
     players = [one,two]
     current = 0
     while(myBoard.winner==0):
@@ -15,8 +15,8 @@ def game(verbose):
             (p,x,y)=players[current].makeMove()
             myBoard.makeMove(p,x,y)
             current = (current+1)%2
-        except Exception:
-            print('Invalid move!')
+        except Exception as err:
+            raise(err)
     if(myBoard.winner>0):
         myBoard.print()
         print('Player '+str(myBoard.winner)+' wins!')
@@ -26,10 +26,5 @@ def game(verbose):
     return myBoard.winner
 
 def main():
-    win = 0
-    count = 0
-    while(win!=-1):
-        win = game(False)
-        count += 1
-    print('In only',count,'games, too!')
+    win = game(True,M,M)
 main()
